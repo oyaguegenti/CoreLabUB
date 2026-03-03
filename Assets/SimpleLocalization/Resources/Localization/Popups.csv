@@ -1,0 +1,21 @@
+Key,Catalan,Spanish,English
+Welcome,"“Benvingut al Centre de Suport a la Recerca  “Core Lab”.
+ Ets un jove investigador incorporat a un projecte multidisciplinari. Tenim una mostra desconeguda trobada en condicions especials.
+ 
+El teu primer repte et porta a l'Archeolab, on hauràs d'analitzar una mostra arqueològica per extreure informació sobre la seva morfologia, composició i context històric.
+","“Bienvenido al Centro de Apoyo a la Investigación “Core Lab”. 
+Eres un joven investigador incorporado en un proyecto multidisciplinar. Tenemos una muestra desconocida encontrada en condiciones especiales.
+
+Tu primer reto te lleva a Archeolab, donde deberás analizar una muestra arqueológica para extraer información sobre su morfología, composición y contexto histórico.","“Welcome to the Research Support Center “Core Lab”.
+You are a young researcher incorporated into a multidisciplinary project. We have an unknown sample found under special conditions.
+
+Your first challenge takes you to the Archeolab, where you will have to analyze an archaeological sample to extract information about its morphology, composition and historical context."
+GrabCard,Primer pas: recull la targeta d’accés per a l’Archeolab.,Primer paso: recoge la targeta de acceso al Archeolab.,First step: collect the access card for the Archeolab.
+LocateBowl,"Localitza el bol ceràmic etiquetat com a ""Mostra A - Cau d'en Calvet""","Localiza el cuenco cerámico etiquetado como ""Mostra A - Cau d'en Calvet""","Locate the ceramic bowl labeled ""Example A - Cau d'en Calvet"""
+RemoveSample,Fes servir un bastonet estèril per extreure una petita mostra del bol.,Utiliza un palito estéril para extraer una pequeña muestra del cuenco,Use a sterile swab to remove a small sample from the bowl.
+PlaceSample,Col·loca la mostra sobre un portamostres metàl.lic.,Coloca la muestra sobre un portamuestras metálico.,Place the sample on a metal sample holder.
+MicroscopeAction,"Obra la cambra del microscopi SEM, Insereix el portamostres a la safata, tanca la cambra i comença l'analisis.","Abre el microscopio SEM, Inserta el portamuestras en la bandeja, cierra el microscopio y comienza el análisis.","Open the SEM microscope, insert the sample holder into the tray, close the microscope and start the analysis."
+Analysis,Explora les imatges i els gràfics i Activa el mode de microanàlisi,Explora las imágenes y los gráficos y Activa el modo de microanálisis,Explore images and graphs and activate microanalysis mode.
+Info,“Les inclusions de quars reforcen la ceràmica durant la cocció. També es detecten restes microscòpiques de pol·len: una pista sobre l’entorn ambiental del jaciment.”,"""Las inclusiones de cuarzo refuerzan la cerámica durante la cocción. También se detectan restos microscópicos de polen: una pista sobre el entorno ambiental del yacimiento.""",“Quartz inclusions strengthen the pottery during firing. Microscopic traces of pollen are also detected: a clue to the environmental environment of the site.”
+SendReport,Premer “Enviar informe”,Pulsar “Enviar informe”,Click “Send report”
+,“Informe rebut. La teva anàlisi ha contribuït a la comprensió de la tecnologia ceràmica del Neolític final al Montgrí. Ben fet!”,"""Informe recibido. Tu análisis ha contribuido a la comprensión de la tecnología cerámica del Neolítico final en el Montgrí. ¡Bien hecho!""",“Report received. Your analysis has contributed to the understanding of the ceramic technology of the late Neolithic in Montgrí. Well done!”
