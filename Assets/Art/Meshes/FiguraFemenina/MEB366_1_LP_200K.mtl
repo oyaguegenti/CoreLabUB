@@ -1,0 +1,13 @@
+# Blender 3.5.1 MTL File: 'MEB366_1.blend'
+# www.blender.org
+
+newmtl MEB366_1_LP_200K_u1_v1
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd MEB366_1_LP_200K_u1_v1_diffuse.jpeg
+map_Bump MEB366_1_LP_200K_u1_v1_normal.jpeg
