@@ -8,7 +8,7 @@ public class BaseSubstance : RaycastTarget
 
     [SerializeField] protected SubstanceType substanceType;
 
-    protected Material substanceMaterial;
+    [SerializeField] protected Material substanceMaterial;
 
     protected override void Awake()
     {

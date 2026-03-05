@@ -15,7 +15,7 @@ public class MinigameSEM : MonoBehaviour
 
     private GameObject sampleMicroscope;
 
-    [SerializeField] private GameObject reportPrefab;
+    [SerializeField] private ReportInfo reportScreen; // pantalla del ordenador
 
     private Dictionary<string, Sprite> substanceSprites = new Dictionary<string, Sprite>();
     private Dictionary<string, GameObject> hologramSubstances = new Dictionary<string, GameObject>();
@@ -38,14 +38,12 @@ public class MinigameSEM : MonoBehaviour
 
     private void Start()
     {
-        // Put sprites in sub folders to get only the necessary reportSprites
         var resourcesSprites = Resources.LoadAll<Sprite>("ReportSprites");
         for (int i = 0; i < resourcesSprites.Length; i++)
         {
             substanceSprites.Add(resourcesSprites[i].name, resourcesSprites[i]);
         }
 
-        // Put Prefabs in sub folders to get only the necessary hologramSubstances
         var resourcesHologram = Resources.LoadAll<GameObject>("HologramSubstances");
         for (int i = 0; i < resourcesHologram.Length; i++)
         {
@@ -55,6 +53,7 @@ public class MinigameSEM : MonoBehaviour
         }
 
         #region Buttons' OnClick
+
         startScan = transform.GetChild(0).GetComponent<Button>();
         startScan.onClick.AddListener(() =>
         {
@@ -99,7 +98,6 @@ public class MinigameSEM : MonoBehaviour
         currentSubstanceImage = transform.GetChild(6).GetComponent<Image>();
         substanceDBImage = transform.GetChild(7).GetComponent<Image>();
 
-
         zoomOut = transform.GetChild(8).GetComponent<Button>();
         zoomOut.onClick.AddListener(() =>
         {
@@ -121,13 +119,10 @@ public class MinigameSEM : MonoBehaviour
 
     private void StartMinigame()
     {
-        // Inclusive-Exclusive, Random Pollen
         currentSubstanceNum = Random.Range(1, 4);
 
         currentSubstanceImage.sprite = substanceSprites[substanceType.ToString() + currentSubstanceNum];
 
-        // Prevent Getting The same photo
-        // 2 is offset, %3 is to cycle (3 is the amount of photos), +1 because there is no photo 0.
         substanceNumDB = (currentSubstanceNum + 1) % 3 + 1;
 
         substanceDBImage.sprite = substanceSprites[substanceType.ToString() + substanceNumDB];
@@ -151,14 +146,25 @@ public class MinigameSEM : MonoBehaviour
 
     private void GenerateReport()
     {
-        GameObject report = Instantiate(reportPrefab, transform.GetChild(transform.childCount - 1).position, Quaternion.identity);
+        if (reportScreen == null)
+        {
+            Debug.LogError("Report screen not assigned.");
+            return;
+        }
 
-        // Sets Sprites to Report Paper
-        report.GetComponent<ReportInfo>().SetSubstanceAndGraphic(substanceSprites[substanceType.ToString()+currentSubstanceNum], substanceSprites[correctGraphic]);
+        // Activar el Canvas
+        reportScreen.transform.GetChild(0).gameObject.SetActive(true);
 
-        Destroy(sampleMicroscope);
+        reportScreen.SetSubstanceAndGraphic(
+            substanceSprites[substanceType.ToString() + currentSubstanceNum],
+            substanceSprites[correctGraphic]
+        );
+
+        if (sampleMicroscope != null)
+        {
+            Destroy(sampleMicroscope);
+        }
     }
-
     private void NextSubstancePhotoDB()
     {
         if (substanceNumDB == 3) { return; }
@@ -202,7 +208,7 @@ public class MinigameSEM : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            substanceHologram.transform.GetChild(i).gameObject.SetActive(i+1 == currentZoom);
+            substanceHologram.transform.GetChild(i).gameObject.SetActive(i + 1 == currentZoom);
         }
     }
 }
