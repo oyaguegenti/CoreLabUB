@@ -347,7 +347,7 @@ Transform:
   m_Children:
   - {fileID: 5632265467412769317}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &6596194715435920547
 Rigidbody:
@@ -697,7 +697,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5cf62a770b6f3ed41837ba61c67065cc, type: 2}
+  - {fileID: 2100000, guid: fed5368f290bff24ba919621341c0537, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -754,6 +754,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   substanceType: 1
+  substanceMaterial: {fileID: 0}
 --- !u!65 &8146190745709427670
 BoxCollider:
   m_ObjectHideFlags: 0
