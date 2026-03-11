@@ -13,6 +13,9 @@ public class Stick : RaycastInteractable
     private RaycastTarget previousTarget;
     private BaseSubstance substance;
 
+    private SubstanceType currentSubstanceType = SubstanceType.NULL;
+    private Material currentSubstanceMaterial;
+
     private Vector3 headPosition = new Vector3(0, 0, 0.02f);
     [SerializeField] private float rayDistance = 0.25f;
 
@@ -132,8 +135,18 @@ public class Stick : RaycastInteractable
 
     public void SetSubstance(BaseSubstance substanceFound)
     {
+        if (substanceFound == null)
+        {
+            Debug.LogWarning("Trying to set NULL substance on stick.");
+            return;
+        }
+
         Debug.Log("Substance set: " + substanceFound.name);
+
         substance = substanceFound;
+        currentSubstanceType = substanceFound.GetSubstanceType();
+        currentSubstanceMaterial = substanceFound.GetSubstanceMaterial();
+
         stickState = StickState.PutSample;
     }
 
@@ -154,13 +167,12 @@ public class Stick : RaycastInteractable
 
     public Material GetSubstanceMaterial()
     {
-        if (substance == null)
-        {
-            Debug.LogWarning("Substance is NULL when requesting material");
-            return null;
-        }
+        return currentSubstanceMaterial;
+    }
 
-        return substance.GetSubstanceMaterial();
+    public SubstanceType GetSubstanceType()
+    {
+        return currentSubstanceType;
     }
 
     private void OnDrawGizmos()

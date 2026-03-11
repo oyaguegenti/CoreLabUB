@@ -1,35 +1,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-// Permissions to access the Labs, order in which the labs are unlocked. switch order if needed
 public enum CardPerms { Archeolab = 0, Biolab = 1, Geolab = 2, Nanolab = 3, Entrance = 4 }
 
 public class MagneticCard : AttachableObject
 {
-    [SerializeField] private CardPerms initialCardPerm;
+    [SerializeField] private CardPerms initialCardPerm = CardPerms.Entrance;
 
     private Dictionary<CardPerms, bool> cardPerms = new Dictionary<CardPerms, bool>();
 
-    // This list must follow the CardPerms enum order
+    // Orden obligatorio:
+    // 0 Archeolab
+    // 1 Biolab
+    // 2 Geolab
+    // 3 Nanolab
+    // 4 Entrance
     [SerializeField] private List<Material> cardMaterials = new List<Material>();
 
     protected override void Awake()
     {
         base.Awake();
 
-        // Set Interactable Type
         interactableType = InteractableType.MagneticCard;
 
-        // Adding Default Card Perms 
-        cardPerms.Add(CardPerms.Archeolab, true);
+        InitializePerms();
+        SetCardPermission(initialCardPerm);
+    }
+
+    private void InitializePerms()
+    {
+        cardPerms.Clear();
+
+        cardPerms.Add(CardPerms.Archeolab, false);
         cardPerms.Add(CardPerms.Biolab, false);
         cardPerms.Add(CardPerms.Geolab, false);
         cardPerms.Add(CardPerms.Nanolab, false);
         cardPerms.Add(CardPerms.Entrance, false);
-
-        // Change bool to True to Change Card perms and Material
-        AddPerms(initialCardPerm);
     }
 
     public override void SelectEnter(GameObject interactor)
@@ -44,7 +50,6 @@ public class MagneticCard : AttachableObject
             ReturnToPreviousPosition();
         }
 
-        // Deactivate All Cardreaders
         CardReader.toggleCardReaderRaycast.Invoke(false);
     }
 
@@ -52,19 +57,38 @@ public class MagneticCard : AttachableObject
     {
         base.OnAttach(attachPosition);
 
-        // This closes first popup
-        PopupsManager.Instance.ClosePopup(0); // TEMP
+        PopupsManager.Instance.ClosePopup(0);
     }
 
     public bool CheckPerm(CardPerms cardPerm)
     {
         return cardPerms[cardPerm];
-    }    
+    }
+
+    public void SetCardPermission(CardPerms labPerm)
+    {
+        InitializePerms();
+
+        // Siempre Entrance
+        cardPerms[CardPerms.Entrance] = true;
+
+        // Si se elige un laboratorio, también se marca
+        if (labPerm != CardPerms.Entrance)
+        {
+            cardPerms[labPerm] = true;
+            ChangeMaterial(labPerm);
+        }
+        else
+        {
+            ChangeMaterial(CardPerms.Entrance);
+        }
+
+        Debug.Log("Card permission set to: Entrance + " + labPerm);
+    }
 
     public void AddPerms(CardPerms cardPerm)
     {
         cardPerms[cardPerm] = true;
-        ChangeMaterial(cardPerm);
     }
 
     public void RemovePerms(CardPerms cardPerm)
@@ -74,20 +98,21 @@ public class MagneticCard : AttachableObject
 
     private void ChangeMaterial(CardPerms cardPerm)
     {
-        CardPerms highestCardPerm = CardPerms.Archeolab;
+        int materialIndex = (int)cardPerm;
 
-        // Finds the Highest card level
-        foreach (var perm in cardPerms)
+        if (cardMaterials == null || cardMaterials.Count <= materialIndex || cardMaterials[materialIndex] == null)
         {
-            if (perm.Value)
-            {
-                highestCardPerm = perm.Key;
-            }
+            Debug.LogWarning("Card material missing for perm: " + cardPerm);
+            return;
         }
 
-        if ((int)highestCardPerm > (int)cardPerm)
-        { return; }
+        Renderer rendererComponent = GetComponent<Renderer>();
+        if (rendererComponent == null)
+        {
+            Debug.LogWarning("MagneticCard has no Renderer.");
+            return;
+        }
 
-        GetComponent<Renderer>().material = cardMaterials[(int)cardPerm];
+        rendererComponent.material = cardMaterials[materialIndex];
     }
 }

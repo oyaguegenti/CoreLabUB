@@ -1,99 +1,105 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DrawerMover : MonoBehaviour
 {
-    [Header("Target")]
-    [SerializeField] private Transform target; // Si es null, usa este transform
+    [System.Serializable]
+    private class ExtraMoveTarget
+    {
+        public Transform target;
+        public float targetX;
+    }
 
-    [Header("Movement (solo X, local)")]
+    [Header("Main Target")]
+    [SerializeField] private Transform target;
+
+    [Header("Main Movement (solo X, local)")]
     [SerializeField] private float targetX = 0f;
     [SerializeField] private float moveSpeed = 1.5f;
 
-    [Header("Physics children while moving")]
-    [SerializeField] private bool disableChildrenPhysicsWhileMoving = true;
+    [Header("Extra Targets To Move With Drawer")]
+    [SerializeField] private List<ExtraMoveTarget> extraTargets = new List<ExtraMoveTarget>();
 
     private bool isMoving;
 
-    private struct RBState
-    {
-        public Rigidbody rb;
-        public bool wasKinematic;
-        public bool hadGravity;
-    }
-
-    private readonly List<RBState> cachedStates = new List<RBState>();
-
     public void Open()
     {
-        if (isMoving) return;
-        StartCoroutine(MoveToXCoroutine(targetX));
+        if (isMoving)
+        {
+            return;
+        }
+
+        StartCoroutine(MoveToXCoroutine());
     }
 
-    private IEnumerator MoveToXCoroutine(float destX)
+    private IEnumerator MoveToXCoroutine()
     {
         isMoving = true;
 
-        Transform t = target != null ? target : transform;
+        Transform mainTarget = target != null ? target : transform;
 
-        if (disableChildrenPhysicsWhileMoving)
-            DisableChildrenPhysics(t);
+        Vector3 mainStart = mainTarget.localPosition;
+        Vector3 mainEnd = new Vector3(targetX, mainStart.y, mainStart.z);
 
-        Vector3 start = t.localPosition;
-        Vector3 end = new Vector3(destX, start.y, start.z);
+        List<Vector3> extraStarts = new List<Vector3>();
+        List<Vector3> extraEnds = new List<Vector3>();
 
-        while (Mathf.Abs(t.localPosition.x - end.x) > 0.001f)
+        for (int i = 0; i < extraTargets.Count; i++)
+        {
+            if (extraTargets[i] == null || extraTargets[i].target == null)
+            {
+                extraStarts.Add(Vector3.zero);
+                extraEnds.Add(Vector3.zero);
+                continue;
+            }
+
+            Vector3 extraStart = extraTargets[i].target.localPosition;
+            Vector3 extraEnd = new Vector3(extraTargets[i].targetX, extraStart.y, extraStart.z);
+
+            extraStarts.Add(extraStart);
+            extraEnds.Add(extraEnd);
+        }
+
+        while (Mathf.Abs(mainTarget.localPosition.x - mainEnd.x) > 0.001f)
         {
             float step = moveSpeed * Time.deltaTime;
-            float newX = Mathf.MoveTowards(t.localPosition.x, end.x, step);
-            t.localPosition = new Vector3(newX, start.y, start.z);
+
+            float newMainX = Mathf.MoveTowards(mainTarget.localPosition.x, mainEnd.x, step);
+            mainTarget.localPosition = new Vector3(newMainX, mainStart.y, mainStart.z);
+
+            for (int i = 0; i < extraTargets.Count; i++)
+            {
+                if (extraTargets[i] == null || extraTargets[i].target == null)
+                {
+                    continue;
+                }
+
+                Transform extraTarget = extraTargets[i].target;
+                Vector3 extraEnd = extraEnds[i];
+                Vector3 extraStart = extraStarts[i];
+
+                float newExtraX = Mathf.MoveTowards(extraTarget.localPosition.x, extraEnd.x, step);
+                extraTarget.localPosition = new Vector3(newExtraX, extraStart.y, extraStart.z);
+            }
+
             yield return null;
         }
 
-        t.localPosition = end;
+        mainTarget.localPosition = mainEnd;
 
-        if (disableChildrenPhysicsWhileMoving)
-            RestoreChildrenPhysics();
+        for (int i = 0; i < extraTargets.Count; i++)
+        {
+            if (extraTargets[i] == null || extraTargets[i].target == null)
+            {
+                continue;
+            }
+
+            Transform extraTarget = extraTargets[i].target;
+            Vector3 extraEnd = extraEnds[i];
+            extraTarget.localPosition = extraEnd;
+        }
 
         isMoving = false;
-    }
-
-    private void DisableChildrenPhysics(Transform root)
-    {
-        cachedStates.Clear();
-
-        var rbs = root.GetComponentsInChildren<Rigidbody>(true);
-
-        foreach (var rb in rbs)
-        {
-            // Ignoramos el Rigidbody del propio root
-            if (rb.transform == root)
-                continue;
-
-            cachedStates.Add(new RBState
-            {
-                rb = rb,
-                wasKinematic = rb.isKinematic,
-                hadGravity = rb.useGravity
-            });
-
-            rb.isKinematic = true;
-            rb.useGravity = false;
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-        }
-    }
-
-    private void RestoreChildrenPhysics()
-    {
-        foreach (var s in cachedStates)
-        {
-            if (s.rb == null) continue;
-            s.rb.isKinematic = s.wasKinematic;
-            s.rb.useGravity = s.hadGravity;
-        }
-
-        cachedStates.Clear();
     }
 }

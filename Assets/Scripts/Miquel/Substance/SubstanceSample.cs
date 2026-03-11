@@ -5,11 +5,10 @@ public class SubstanceSample : RaycastTarget
     [Header("Sample Visual Objects")]
     [SerializeField] private Renderer[] sampleRenderers;
 
-    [Header("Material To Apply (Inspector)")]
+    [Header("Runtime Data")]
     [SerializeField] private Material substanceMaterial;
-
     [SerializeField] private bool hasSubstance = false;
-    [SerializeField] private SubstanceType substanceType;
+    [SerializeField] private SubstanceType substanceType = SubstanceType.NULL;
 
     protected override void Awake()
     {
@@ -34,6 +33,11 @@ public class SubstanceSample : RaycastTarget
         Stick stick = emitter.GetComponent<Stick>();
         if (stick == null)
         {
+            stick = emitter.GetComponentInParent<Stick>();
+        }
+
+        if (stick == null)
+        {
             Debug.Log("No Stick component found");
             return;
         }
@@ -51,6 +55,24 @@ public class SubstanceSample : RaycastTarget
             Debug.Log("Stick has no sample");
             return;
         }
+
+        Material stickMaterial = stick.GetSubstanceMaterial();
+        SubstanceType stickSubstanceType = stick.GetSubstanceType();
+
+        if (stickMaterial == null)
+        {
+            Debug.LogWarning("Stick material is NULL.");
+            return;
+        }
+
+        if (stickSubstanceType == SubstanceType.NULL)
+        {
+            Debug.LogWarning("Stick substance type is NULL.");
+            return;
+        }
+
+        substanceMaterial = stickMaterial;
+        substanceType = stickSubstanceType;
 
         ApplySubstance();
     }
@@ -75,11 +97,12 @@ public class SubstanceSample : RaycastTarget
         {
             if (sampleRenderers[i] != null)
             {
-                sampleRenderers[i].sharedMaterial = substanceMaterial;
+                sampleRenderers[i].material = substanceMaterial;
             }
         }
 
         hasSubstance = true;
+        Debug.Log("Sample loaded with substance: " + substanceType);
     }
 
     public SubstanceType GetSubstanceType()
@@ -90,5 +113,10 @@ public class SubstanceSample : RaycastTarget
     public bool HasSubstance()
     {
         return hasSubstance;
+    }
+
+    public Material GetSubstanceMaterial()
+    {
+        return substanceMaterial;
     }
 }
