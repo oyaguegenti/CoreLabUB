@@ -11,7 +11,6 @@ public class MinigameSEM : MonoBehaviour
     {
         Idle,
         ReadyToStart,
-        ReadyToSearch,
         Searching,
         SearchFinished,
         ViewingReport,
@@ -57,7 +56,6 @@ public class MinigameSEM : MonoBehaviour
 
     [Header("Buttons")]
     [SerializeField] private Button startScanButton;
-    [SerializeField] private Button searchResultsButton;
     [SerializeField] private Button view3DButton;
     [SerializeField] private Button viewReportButton;
     [SerializeField] private Button reportNextButton;
@@ -71,7 +69,6 @@ public class MinigameSEM : MonoBehaviour
 
     [Header("Button Label References (assign the visible text of each button)")]
     [SerializeField] private TMP_Text startScanTMP;
-    [SerializeField] private TMP_Text searchResultsTMP;
     [SerializeField] private TMP_Text view3DTMP;
     [SerializeField] private TMP_Text viewReportTMP;
     [SerializeField] private TMP_Text reportNextTMP;
@@ -83,7 +80,6 @@ public class MinigameSEM : MonoBehaviour
 
     [Header("Button Labels")]
     [SerializeField] private string startScanButtonLabel = "Start Scan";
-    [SerializeField] private string searchResultsButtonLabel = "Search Results";
     [SerializeField] private string view3DButtonLabel = "View 3D";
     [SerializeField] private string viewReportButtonLabel = "View Report";
     [SerializeField] private string reportNextButtonLabel = "Next";
@@ -111,6 +107,11 @@ public class MinigameSEM : MonoBehaviour
     [Header("Hologram Zoom Settings")]
     [SerializeField] private int defaultZoomIndex = 0;
 
+    [Header("Search Audio Loop")]
+    [SerializeField] private AudioSource searchLoopAudioSource;
+    [SerializeField] private AudioClip searchLoopClip;
+    [SerializeField] private AudioClip resultFoundClip;
+
     private SEMState currentState = SEMState.Idle;
     private SubstanceSEMData currentData;
 
@@ -133,12 +134,6 @@ public class MinigameSEM : MonoBehaviour
         {
             startScanButton.onClick.RemoveAllListeners();
             startScanButton.onClick.AddListener(OnStartScanPressed);
-        }
-
-        if (searchResultsButton != null)
-        {
-            searchResultsButton.onClick.RemoveAllListeners();
-            searchResultsButton.onClick.AddListener(OnSearchResultsPressed);
         }
 
         if (view3DButton != null)
@@ -356,32 +351,6 @@ public class MinigameSEM : MonoBehaviour
             startScanButton.gameObject.SetActive(false);
         }
 
-        if (searchResultsButton != null)
-        {
-            searchResultsButton.gameObject.SetActive(true);
-        }
-
-        currentState = SEMState.ReadyToSearch;
-    }
-
-    private void OnSearchResultsPressed()
-    {
-        if (currentState != SEMState.ReadyToSearch)
-        {
-            return;
-        }
-
-        if (currentData == null)
-        {
-            Debug.LogWarning("Current SEM data is null.");
-            return;
-        }
-
-        if (searchResultsButton != null)
-        {
-            searchResultsButton.gameObject.SetActive(false);
-        }
-
         if (view3DButton != null)
         {
             view3DButton.gameObject.SetActive(false);
@@ -407,6 +376,8 @@ public class MinigameSEM : MonoBehaviour
             mainDisplayImageDatabase.gameObject.SetActive(true);
         }
 
+        StartSearchLoopAudio();
+
         searchTimer = 0f;
         currentSearchIndex = 0;
         currentSearchLoop = 0;
@@ -420,6 +391,9 @@ public class MinigameSEM : MonoBehaviour
             mainDisplayImageDatabase.gameObject.SetActive(true);
             mainDisplayImageDatabase.sprite = currentData.resultSprite;
         }
+
+        StopSearchLoopAudio();
+        PlayResultFoundAudio();
 
         if (view3DButton != null)
         {
@@ -540,44 +514,17 @@ public class MinigameSEM : MonoBehaviour
     {
         if (currentData == null || currentData.hologramRoot == null)
         {
-            if (zoomInButton != null)
-            {
-                zoomInButton.gameObject.SetActive(false);
-            }
-
-            if (zoomOutButton != null)
-            {
-                zoomOutButton.gameObject.SetActive(false);
-            }
-
             return;
-        }
-
-        int childCount = currentData.hologramRoot.transform.childCount;
-
-        if (childCount <= 1)
-        {
-            if (zoomInButton != null)
-            {
-                zoomInButton.gameObject.SetActive(false);
-            }
-
-            if (zoomOutButton != null)
-            {
-                zoomOutButton.gameObject.SetActive(false);
-            }
-
-            return;
-        }
-
-        if (zoomOutButton != null)
-        {
-            zoomOutButton.gameObject.SetActive(currentHologramZoomIndex > 0);
         }
 
         if (zoomInButton != null)
         {
-            zoomInButton.gameObject.SetActive(currentHologramZoomIndex < childCount - 1);
+            zoomInButton.gameObject.SetActive(true);
+        }
+
+        if (zoomOutButton != null)
+        {
+            zoomOutButton.gameObject.SetActive(true);
         }
     }
 
@@ -793,11 +740,6 @@ public class MinigameSEM : MonoBehaviour
             startScanButton.gameObject.SetActive(false);
         }
 
-        if (searchResultsButton != null)
-        {
-            searchResultsButton.gameObject.SetActive(false);
-        }
-
         if (view3DButton != null)
         {
             view3DButton.gameObject.SetActive(false);
@@ -838,6 +780,7 @@ public class MinigameSEM : MonoBehaviour
             zoomOutButton.gameObject.SetActive(false);
         }
 
+        StopSearchLoopAudio();
         DisableAllHolograms();
 
         currentState = SEMState.Idle;
@@ -857,7 +800,6 @@ public class MinigameSEM : MonoBehaviour
     private void ApplyButtonLabels()
     {
         ApplyTMPLabel(startScanTMP, startScanButtonLabel);
-        ApplyTMPLabel(searchResultsTMP, searchResultsButtonLabel);
         ApplyTMPLabel(view3DTMP, view3DButtonLabel);
         ApplyTMPLabel(viewReportTMP, viewReportButtonLabel);
         ApplyTMPLabel(reportNextTMP, reportNextButtonLabel);
@@ -876,5 +818,46 @@ public class MinigameSEM : MonoBehaviour
         }
 
         targetText.text = label;
+    }
+
+    private void StartSearchLoopAudio()
+    {
+        if (searchLoopAudioSource == null || searchLoopClip == null)
+        {
+            return;
+        }
+
+        searchLoopAudioSource.clip = searchLoopClip;
+        searchLoopAudioSource.loop = true;
+        searchLoopAudioSource.Play();
+    }
+
+    private void StopSearchLoopAudio()
+    {
+        if (searchLoopAudioSource == null)
+        {
+            return;
+        }
+
+        if (searchLoopAudioSource.isPlaying)
+        {
+            searchLoopAudioSource.Stop();
+        }
+
+        searchLoopAudioSource.clip = null;
+        searchLoopAudioSource.loop = false;
+    }
+
+    private void PlayResultFoundAudio()
+    {
+        if (resultFoundClip == null)
+        {
+            return;
+        }
+
+        if (searchLoopAudioSource != null)
+        {
+            searchLoopAudioSource.PlayOneShot(resultFoundClip);
+        }
     }
 }

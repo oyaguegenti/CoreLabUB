@@ -22,7 +22,6 @@ public class AudioManager : Singleton<AudioManager>
         {
             { "CardReaderConfirmation", cardReaderConfirmation },
             { "CardReaderError", cardReaderError },
-
             { "StickSuccess", stickSuccess }
         };
     }
