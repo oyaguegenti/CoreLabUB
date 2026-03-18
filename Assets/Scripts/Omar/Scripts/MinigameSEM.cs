@@ -428,7 +428,7 @@ public class MinigameSEM : MonoBehaviour
 
         if (viewReportButton != null)
         {
-            viewReportButton.gameObject.SetActive(true);
+            viewReportButton.gameObject.SetActive(false);
         }
 
         currentState = SEMState.SearchFinished;
@@ -453,6 +453,11 @@ public class MinigameSEM : MonoBehaviour
         if (zoomOutButton != null)
         {
             zoomOutButton.gameObject.SetActive(true);
+        }
+
+        if (viewReportButton != null)
+        {
+            viewReportButton.gameObject.SetActive(true);
         }
 
         RefreshZoomButtons();
