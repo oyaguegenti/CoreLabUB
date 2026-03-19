@@ -10,6 +10,16 @@ public class MenuInGame : MonoBehaviour
 
     private bool wasPrimaryButtonPressedLastFrame = false;
 
+    private void Start()
+    {
+        if (pauseMenu != null)
+        {
+            pauseMenu.SetActive(false);
+        }
+
+        isMenuActive = false;
+    }
+
     // Detecta si s'ha presionat el boto primary button (A del mando de les Metaquest 3, en aquest cas)
     private void Update()
     {
