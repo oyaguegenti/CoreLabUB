@@ -1,31 +1,55 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 
-
 public class MenuInGame : MonoBehaviour
 {
-    public GameObject pauseMenu; // Asigna tu menú en el Inspector
-    [SerializeField]private bool isMenuActive = false;
+    [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private bool isMenuActive = false;
 
-    void Update()
+    private bool wasPrimaryButtonPressedLastFrame = false;
+
+    // Detecta si s'ha presionat el boto primary button (A del mando de les Metaquest 3, en aquest cas)
+    private void Update()
     {
-        // Detectar si se presiona el botón "PrimaryButton" (botón A en Oculus)
-        if (InputHelpers.IsPressed(InputDevices.GetDeviceAtXRNode(XRNode.RightHand), InputHelpers.Button.PrimaryButton, out bool isPressed) && isPressed)
+        InputDevice rightHandDevice = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
+
+        bool isPressed = false;
+        bool isValidPress = InputHelpers.IsPressed(
+            rightHandDevice,
+            InputHelpers.Button.PrimaryButton,
+            out isPressed
+        );
+
+        if (!isValidPress)
+        {
+            return;
+        }
+
+        if (isPressed && !wasPrimaryButtonPressedLastFrame)
         {
             TogglePauseMenu();
         }
+
+        wasPrimaryButtonPressedLastFrame = isPressed;
     }
 
     public void TogglePauseMenu()
     {
         isMenuActive = !isMenuActive;
-        pauseMenu.SetActive(isMenuActive);
+
+        if (pauseMenu != null)
+        {
+            pauseMenu.SetActive(isMenuActive);
+        }
     }
+
+    public void ResetScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
     public void LoadScene(int index)
     {
         SceneManager.LoadScene(index);
