@@ -47094,8 +47094,8 @@ MonoBehaviour:
   isMinigameRunning: 0
   defaultZoomIndex: 0
   searchLoopAudioSource: {fileID: 4650079422871936439}
-  searchLoopClip: {fileID: 0}
-  resultFoundClip: {fileID: 0}
+  searchLoopClip: {fileID: 8300000, guid: 2a27cad94b40a124ea88653c0cbac9c2, type: 3}
+  resultFoundClip: {fileID: 8300000, guid: 654dba2fa619aca45a9b1c369db9d2fb, type: 3}
 --- !u!114 &2084533153
 MonoBehaviour:
   m_ObjectHideFlags: 0
