@@ -5,9 +5,19 @@ public enum StickState { GetSample, PutSample }
 
 public class Stick : RaycastInteractable
 {
-    private bool enableDetection = true;
-    private bool hasHit = false;
+    [Header("Detection")]
+    [SerializeField] private bool enableDetection = true;
+    [SerializeField] private float rayDistance = 0.25f;
+    [SerializeField] protected LayerMask substanceLayer;
 
+    [Header("References")]
+    [SerializeField] private Renderer stickHeadRenderer;
+    [SerializeField] private AudioSource headAudio;
+
+    [Header("Ray Origin Offset")]
+    [SerializeField] private Vector3 headPosition = new Vector3(0f, 0f, 0.02f);
+
+    private bool hasHit = false;
     private StickState stickState = StickState.GetSample;
 
     private RaycastTarget previousTarget;
@@ -16,22 +26,24 @@ public class Stick : RaycastInteractable
     private SubstanceType currentSubstanceType = SubstanceType.NULL;
     private Material currentSubstanceMaterial;
 
-    private Vector3 headPosition = new Vector3(0, 0, 0.02f);
-    [SerializeField] private float rayDistance = 0.25f;
-
-    [SerializeField] protected LayerMask substanceLayer;
-
-    private AudioSource headAudio;
-
     protected override void Awake()
     {
         base.Awake();
         interactableType = InteractableType.Stick;
 
-        headAudio = transform.GetChild(1).gameObject.GetComponent<AudioSource>();
+        if (stickHeadRenderer == null)
+        {
+            Debug.LogWarning("[Stick] Stick head Renderer is not assigned in Inspector.");
+        }
 
-        headAudio.Play();
-        headAudio.Pause();
+        if (headAudio != null)
+        {
+            headAudio.playOnAwake = false;
+            if (headAudio.isPlaying)
+            {
+                headAudio.Stop();
+            }
+        }
 
         Debug.Log("Stick Awake");
     }
@@ -49,7 +61,7 @@ public class Stick : RaycastInteractable
         if (!enableDetection)
         {
             Debug.Log("Detection disabled");
-            yield return null;
+            yield break;
         }
 
         while (isDragging)
@@ -116,21 +128,41 @@ public class Stick : RaycastInteractable
 
         Debug.Log("Stick released");
 
-        if (!hasHit) return;
+        if (!hasHit)
+        {
+            return;
+        }
 
         if (previousTarget != null)
         {
             previousTarget.OnRaycastExit(gameObject);
         }
 
-        headAudio.Pause();
+        if (headAudio != null)
+        {
+            headAudio.Pause();
+        }
+
         hasHit = false;
     }
 
     public void ChangeHead(Material material)
     {
         Debug.Log("Changing head material");
-        transform.GetChild(0).GetComponent<Renderer>().material = material;
+
+        if (stickHeadRenderer == null)
+        {
+            Debug.LogWarning("[Stick] Cannot change head material because stickHeadRenderer is null.");
+            return;
+        }
+
+        if (material == null)
+        {
+            Debug.LogWarning("[Stick] Cannot change head material because provided material is null.");
+            return;
+        }
+
+        stickHeadRenderer.material = material;
     }
 
     public void SetSubstance(BaseSubstance substanceFound)
@@ -186,14 +218,21 @@ public class Stick : RaycastInteractable
     {
         Debug.Log("Stick destroyed");
 
-        if (!hasHit) return;
+        if (!hasHit)
+        {
+            return;
+        }
 
         if (previousTarget != null)
         {
             previousTarget.OnRaycastExit(gameObject);
         }
 
-        headAudio.Pause();
+        if (headAudio != null)
+        {
+            headAudio.Pause();
+        }
+
         hasHit = false;
     }
 }

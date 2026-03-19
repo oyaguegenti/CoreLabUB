@@ -93,7 +93,7 @@ public class MinigameSEM : MonoBehaviour
     [SerializeField] private bool forceButtonLabelsEveryFrame = true;
 
     [Header("Popup")]
-    [SerializeField] private GameObject completionPopup;
+    [SerializeField] private EndPopupController completionPopup;
 
     [Header("VR Restart")]
     [SerializeField] private bool restartWithBothGripButtons = true;
@@ -204,7 +204,7 @@ public class MinigameSEM : MonoBehaviour
             ApplyButtonLabels();
         }
 
-        if (currentState == SEMState.Completed && completionPopup != null && completionPopup.activeInHierarchy)
+        if (currentState == SEMState.Completed && completionPopup != null && completionPopup.IsVisible())
         {
             CheckVRRestartInput();
         }
@@ -635,7 +635,7 @@ public class MinigameSEM : MonoBehaviour
 
         if (completionPopup != null)
         {
-            completionPopup.SetActive(true);
+            completionPopup.Show();
         }
 
         if (popupRestartButton != null)
@@ -714,7 +714,7 @@ public class MinigameSEM : MonoBehaviour
 
         if (completionPopup != null)
         {
-            completionPopup.SetActive(false);
+            completionPopup.Hide();
         }
 
         if (mainDisplayImageSEM != null)

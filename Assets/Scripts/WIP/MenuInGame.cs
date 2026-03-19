@@ -8,6 +8,8 @@ public class MenuInGame : MonoBehaviour
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private bool isMenuActive = false;
 
+    [SerializeField] private GameObject blockPauseWhenThisIsActive;
+
     private bool wasPrimaryButtonPressedLastFrame = false;
 
     private void Start()
@@ -39,6 +41,12 @@ public class MenuInGame : MonoBehaviour
 
         if (isPressed && !wasPrimaryButtonPressedLastFrame)
         {
+            if (blockPauseWhenThisIsActive != null && blockPauseWhenThisIsActive.activeInHierarchy)
+            {
+                wasPrimaryButtonPressedLastFrame = isPressed;
+                return;
+            }
+
             TogglePauseMenu();
         }
 
