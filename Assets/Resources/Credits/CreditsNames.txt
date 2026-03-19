@@ -1,6 +1,7 @@
 Victor Font		    Hugo Ahmed Peralta
 Daniel González	    Lluís Carola
-Yusra Mayeed		    Roger Aymerich
-Alex Taravilla		    Arnau Domènech
+Yusra Mayeed	            Roger Aymerich
+Alex Taravilla	            Arnau Domènech
 Bryan Moran		    Carla Guasch
 Miquel Forcada	    Marc Ros
+Omar Yagüe	            Joel Buenavida
