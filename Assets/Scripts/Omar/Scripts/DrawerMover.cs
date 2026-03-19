@@ -21,16 +21,25 @@ public class DrawerMover : MonoBehaviour
     [Header("Extra Targets To Move With Drawer")]
     [SerializeField] private List<ExtraMoveTarget> extraTargets = new List<ExtraMoveTarget>();
 
-    [Header("Release Physics After Move")]
-    [SerializeField] private Rigidbody[] rigidbodiesToRelease;
-    [SerializeField] private Collider[] collidersToEnable;
-    [SerializeField] private float releaseDelay = 0.05f;
+    [Header("Card Swap")]
+    [SerializeField] private GameObject fakeCard;
+    [SerializeField] private GameObject realCard;
+    [SerializeField] private float swapDelay = 0.05f;
 
     private bool isMoving;
+    private bool hasSwapped = false;
 
     private void Awake()
     {
-        SetStoredPhysicsState();
+        if (fakeCard != null)
+        {
+            fakeCard.SetActive(true);
+        }
+
+        if (realCard != null)
+        {
+            realCard.SetActive(false);
+        }
     }
 
     public void Open()
@@ -46,8 +55,6 @@ public class DrawerMover : MonoBehaviour
     private IEnumerator MoveToXCoroutine()
     {
         isMoving = true;
-
-        SetStoredPhysicsState();
 
         Transform mainTarget = target != null ? target : transform;
 
@@ -88,8 +95,8 @@ public class DrawerMover : MonoBehaviour
                 }
 
                 Transform extraTarget = extraTargets[i].target;
-                Vector3 extraStart = extraStarts[i];
                 Vector3 extraEnd = extraEnds[i];
+                Vector3 extraStart = extraStarts[i];
 
                 float newExtraX = Mathf.MoveTowards(extraTarget.localPosition.x, extraEnd.x, step);
                 extraTarget.localPosition = new Vector3(newExtraX, extraStart.y, extraStart.z);
@@ -112,79 +119,31 @@ public class DrawerMover : MonoBehaviour
             extraTarget.localPosition = extraEnd;
         }
 
-        if (releaseDelay > 0f)
+        if (!hasSwapped)
         {
-            yield return new WaitForSeconds(releaseDelay);
+            yield return StartCoroutine(SwapCardCoroutine());
         }
-
-        SetReleasedPhysicsState();
 
         isMoving = false;
     }
 
-    private void SetStoredPhysicsState()
+    private IEnumerator SwapCardCoroutine()
     {
-        if (rigidbodiesToRelease != null)
+        if (swapDelay > 0f)
         {
-            for (int i = 0; i < rigidbodiesToRelease.Length; i++)
-            {
-                Rigidbody currentBody = rigidbodiesToRelease[i];
-                if (currentBody == null)
-                {
-                    continue;
-                }
-
-                currentBody.isKinematic = true;
-                currentBody.useGravity = false;
-                currentBody.velocity = Vector3.zero;
-                currentBody.angularVelocity = Vector3.zero;
-            }
+            yield return new WaitForSeconds(swapDelay);
         }
 
-        if (collidersToEnable != null)
+        if (fakeCard != null)
         {
-            for (int i = 0; i < collidersToEnable.Length; i++)
-            {
-                Collider currentCollider = collidersToEnable[i];
-                if (currentCollider == null)
-                {
-                    continue;
-                }
-
-                currentCollider.enabled = false;
-            }
-        }
-    }
-
-    private void SetReleasedPhysicsState()
-    {
-        if (collidersToEnable != null)
-        {
-            for (int i = 0; i < collidersToEnable.Length; i++)
-            {
-                Collider currentCollider = collidersToEnable[i];
-                if (currentCollider == null)
-                {
-                    continue;
-                }
-
-                currentCollider.enabled = true;
-            }
+            fakeCard.SetActive(false);
         }
 
-        if (rigidbodiesToRelease != null)
+        if (realCard != null)
         {
-            for (int i = 0; i < rigidbodiesToRelease.Length; i++)
-            {
-                Rigidbody currentBody = rigidbodiesToRelease[i];
-                if (currentBody == null)
-                {
-                    continue;
-                }
-
-                currentBody.isKinematic = false;
-                currentBody.useGravity = true;
-            }
+            realCard.SetActive(true);
         }
+
+        hasSwapped = true;
     }
 }
