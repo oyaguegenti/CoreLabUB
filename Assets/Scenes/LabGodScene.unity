@@ -2397,7 +2397,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -2415,8 +2415,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 12
+  m_fontSizeBase: 12
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -13933,7 +13933,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 625828801}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -16649,8 +16649,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 12
+  m_fontSizeBase: 12
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -32258,8 +32258,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22
-  m_fontSizeBase: 22
+  m_fontSize: 12
+  m_fontSizeBase: 12
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -32973,7 +32973,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1498550779}
   m_LocalRotation: {x: -0.707107, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.0005, y: 0.0295, z: 0.0005}
+  m_LocalPosition: {x: -0.0005, y: 0.0205, z: 0.0005}
   m_LocalScale: {x: 0.044895492, y: 0.044895492, z: 0.0029765228}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -35792,7 +35792,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -35810,8 +35810,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 12
+  m_fontSizeBase: 12
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -36809,7 +36809,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6a4ea4ef6be032a49a2b8f13372d2298, type: 2}
+  - {fileID: 2100000, guid: 6495be7df57242742b50e9a6c1520894, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -36860,7 +36860,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1671915580}
-  m_Mesh: {fileID: 2704479458059140250, guid: d9d662308870a3349b7b03edab3c0537, type: 3}
+  m_Mesh: {fileID: 2704479458059140250, guid: 646a95826cf0a1f449c1fe8f116abcfa, type: 3}
 --- !u!4 &1671915584
 Transform:
   m_ObjectHideFlags: 0
@@ -40457,7 +40457,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -40475,8 +40475,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 12
+  m_fontSizeBase: 12
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -46750,7 +46750,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Send Report
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -47038,7 +47038,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 9e8c98033c06b9e44bdb214b7117216e, type: 3}
     - {fileID: 21300000, guid: 68dac0ac8836e6c4eb67b6abe225ca0b, type: 3}
     - {fileID: 21300000, guid: 50903e8fd9db5c74996beacdbad84339, type: 3}
-    - {fileID: 21300000, guid: 1961549e3bddda245bb0f1a0e911a543, type: 3}
+    - {fileID: 21300000, guid: 8c7fbfd085c3f4146b8973e37ce56b16, type: 3}
     hologramRoot: {fileID: 475158869}
   screen1Root: {fileID: 2084533151}
   mainDisplayImageSEM: {fileID: 305902058}
@@ -47069,7 +47069,7 @@ MonoBehaviour:
   viewReportButtonLabel: Report
   reportNextButtonLabel: 
   reportPrevButtonLabel: Prev
-  sendReportButtonLabel: Send Report
+  sendReportButtonLabel: 
   popupRestartButtonLabel: Restart
   zoomInButtonLabel: +
   zoomOutButtonLabel: '-'
@@ -48139,7 +48139,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
