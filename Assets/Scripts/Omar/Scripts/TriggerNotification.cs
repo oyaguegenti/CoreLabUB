@@ -1,5 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class TriggerNotificacion : MonoBehaviour
 {
@@ -11,7 +12,13 @@ public class TriggerNotificacion : MonoBehaviour
     [TextArea]
     public string mensaje;
 
+    [Header("Configuración")]
+    public float duracion = 5f; // tiempo visible
+    public bool soloUnaVez = true; // si se desactiva para siempre
+
     private int playerLayer;
+    private bool yaActivado = false;
+    private Coroutine rutinaActual;
 
     private void Start()
     {
@@ -23,16 +30,33 @@ public class TriggerNotificacion : MonoBehaviour
     {
         if (other.gameObject.layer == playerLayer)
         {
+            // Si es solo una vez y ya se activó → no hacer nada
+            if (soloUnaVez && yaActivado) return;
+
+            yaActivado = true;
+
+            // Activar UI
             panelUI.SetActive(true);
             textoUI.text = mensaje;
+
+            // Reiniciar coroutine si ya había una
+            if (rutinaActual != null)
+                StopCoroutine(rutinaActual);
+
+            rutinaActual = StartCoroutine(DesactivarTrasTiempo());
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private IEnumerator DesactivarTrasTiempo()
     {
-        if (other.gameObject.layer == playerLayer)
+        yield return new WaitForSeconds(duracion);
+
+        panelUI.SetActive(false);
+
+        // Si es solo una vez, desactivamos el trigger completamente
+        if (soloUnaVez)
         {
-            panelUI.SetActive(false);
+            gameObject.SetActive(false);
         }
     }
 }
