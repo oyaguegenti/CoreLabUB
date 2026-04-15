@@ -6140,6 +6140,8 @@ MonoBehaviour:
   panelUI: {fileID: 1198361803}
   textoUI: {fileID: 346942413}
   mensaje: Obre el microscopi, posa el portamostres a dins i tanca la porta
+  duracion: 7
+  soloUnaVez: 1
 --- !u!65 &245217809
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6219,7 +6221,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 245217807}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.148, y: 1.875, z: -41.784}
+  m_LocalPosition: {x: 0.039, y: 1.875, z: -42.314}
   m_LocalScale: {x: 1.96326, y: 3, z: 2.01042}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6782,6 +6784,8 @@ MonoBehaviour:
   panelUI: {fileID: 1198361803}
   textoUI: {fileID: 346942413}
   mensaje: Entra al CoreLab i selecciona el teu repte en la pantalla del mostrador
+  duracion: 5
+  soloUnaVez: 1
 --- !u!1 &309507270
 GameObject:
   m_ObjectHideFlags: 0
@@ -26281,6 +26285,8 @@ MonoBehaviour:
   panelUI: {fileID: 1198361803}
   textoUI: {fileID: 346942413}
   mensaje: Agafa la l'objecte D31 de l'estanteria i deixa'l a l'area de mostres
+  duracion: 5
+  soloUnaVez: 1
 --- !u!65 &1078617111
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -43567,6 +43573,8 @@ MonoBehaviour:
   textoUI: {fileID: 346942413}
   mensaje: "Amb un bastonet, recull les mostres del bol i posa-les al portamostres
     de l\u2019esquerra"
+  duracion: 10
+  soloUnaVez: 1
 --- !u!65 &1896376535
 BoxCollider:
   m_ObjectHideFlags: 0
