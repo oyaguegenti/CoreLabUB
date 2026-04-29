@@ -6140,7 +6140,7 @@ MonoBehaviour:
   panelUI: {fileID: 1198361803}
   textoUI: {fileID: 346942413}
   mensaje: Obre el microscopi, posa el portamostres a dins i tanca la porta
-  duracion: 10
+  duracion: 15
   soloUnaVez: 1
 --- !u!65 &245217809
 BoxCollider:
@@ -6783,8 +6783,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panelUI: {fileID: 1198361803}
   textoUI: {fileID: 346942413}
-  mensaje: Entra al CoreLab i selecciona el teu repte en la pantalla del mostrador
-  duracion: 10
+  mensaje: Selecciona el teu repte en la pantalla del mostrador i agafala tarjeta
+    del calaix
+  duracion: 15
   soloUnaVez: 1
 --- !u!1 &309507270
 GameObject:
@@ -26609,7 +26610,7 @@ MonoBehaviour:
   panelUI: {fileID: 1198361803}
   textoUI: {fileID: 346942413}
   mensaje: Agafa la l'objecte D31 de l'estanteria i deixa'l a l'area de mostres
-  duracion: 10
+  duracion: 15
   soloUnaVez: 1
 --- !u!65 &1078617111
 BoxCollider:
@@ -43928,7 +43929,7 @@ MonoBehaviour:
   textoUI: {fileID: 346942413}
   mensaje: "Amb un bastonet, recull les mostres del bol i posa-les al portamostres
     de l\u2019esquerra"
-  duracion: 10
+  duracion: 15
   soloUnaVez: 1
 --- !u!65 &1896376535
 BoxCollider:
