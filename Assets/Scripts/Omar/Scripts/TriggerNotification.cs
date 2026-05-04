@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using TMPro;
-using System.Collections;
 
 public class TriggerNotificacion : MonoBehaviour
 {
@@ -13,12 +12,11 @@ public class TriggerNotificacion : MonoBehaviour
     public string mensaje;
 
     [Header("Configuración")]
-    public float duracion = 5f; // tiempo visible
-    public bool soloUnaVez = true; // si se desactiva para siempre
+    public bool soloUnaVez = true;
 
     private int playerLayer;
     private bool yaActivado = false;
-    private Coroutine rutinaActual;
+    private bool mensajeActivo = false;
 
     private void Start()
     {
@@ -30,30 +28,33 @@ public class TriggerNotificacion : MonoBehaviour
     {
         if (other.gameObject.layer == playerLayer)
         {
-            // Si es solo una vez y ya se activó → no hacer nada
             if (soloUnaVez && yaActivado) return;
 
             yaActivado = true;
 
-            // Activar UI
+            // Mostrar UI
             panelUI.SetActive(true);
             textoUI.text = mensaje;
-
-            // Reiniciar coroutine si ya había una
-            if (rutinaActual != null)
-                StopCoroutine(rutinaActual);
-
-            rutinaActual = StartCoroutine(DesactivarTrasTiempo());
+            mensajeActivo = true;
         }
     }
 
-    private IEnumerator DesactivarTrasTiempo()
+    private void Update()
     {
-        yield return new WaitForSeconds(duracion);
+        if (!mensajeActivo) return;
 
+        // Botón A (Oculus / Quest suele ser "joystick button 0")
+        if (Input.GetKeyDown(KeyCode.JoystickButton3))
+        {
+            CerrarMensaje();
+        }
+    }
+
+    private void CerrarMensaje()
+    {
         panelUI.SetActive(false);
+        mensajeActivo = false;
 
-        // Si es solo una vez, desactivamos el trigger completamente
         if (soloUnaVez)
         {
             gameObject.SetActive(false);
